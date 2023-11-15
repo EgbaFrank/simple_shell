@@ -32,9 +32,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 
 		if (token[0] != NULL)
 		{
-			if (builtin(token) == 2)
-				break;
-			else if (builtin(token) == 1)
+			if (builtin(token, lineptr) == 1)
 			{
 				env();
 				freetok(token);
@@ -125,9 +123,9 @@ void freetok(char **head)
  * Return: void
  */
 
-int builtin(char **toks)
+int builtin(char **toks, char *line)
 {
-	/*int i;*/
+	int status = 0;
 
 	if (strcmp(toks[0], "env") == 0)
 		return (1);
@@ -135,8 +133,9 @@ int builtin(char **toks)
 	else if (strcmp(toks[0], "exit") == 0)
 	{
 		freetok(toks);
+		free(line);
 
-		return (2);
+		exit(status);
 	}
 
 	else
