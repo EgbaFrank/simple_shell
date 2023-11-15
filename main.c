@@ -120,6 +120,8 @@ void freetok(char **head)
 /**
  * builtin - handles builtin commands exit and env
  * @toks: array of strings
+ * @line: a string to be freed
+ *
  * Return: void
  */
 
