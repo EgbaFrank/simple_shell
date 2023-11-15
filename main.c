@@ -20,7 +20,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 		int_mode = isatty(STDIN_FILENO);
 
 		if (int_mode)
-			write(STDOUT_FILENO, "$ ", 3);
+			write(STDOUT_FILENO, "($) ", 5);
 
 		nread = getline(&lineptr, &n, stdin);
 
