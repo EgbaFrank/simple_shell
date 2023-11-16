@@ -16,8 +16,8 @@ extern char **environ;
 char **tokenate(char *str);
 char *path_finder(char *file);
 void freetok(char **head);
-int builtin(char **toks, char *line);
-void execute(char **toks, char *file);
+int builtin(char **toks, char *line, int status);
+int execute(char **toks, char *file);
 void env(void);
 
 #endif /* SHELL */

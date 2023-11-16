@@ -14,6 +14,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 	size_t n = 0;
 	ssize_t nread;
 	char **token;
+	int status = 0;
 
 	while (1)
 	{
@@ -30,14 +31,15 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 
 		if (token[0] != NULL)
 		{
-			if (builtin(token, lineptr) == 1)
+			if (builtin(token, lineptr, status) == 1)
 			{
 				env();
 				freetok(token);
 				continue;
 			}
 			else
-				execute(token, av[0]);
+				if (execute(token, av[0]) == 1)
+					status = 2;
 		}
 		freetok(token);
 	}
@@ -53,7 +55,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
  * Return: void
  */
 
-void execute(char **toks, char *file)
+int execute(char **toks, char *file)
 {
 	char *filename = strdup(toks[0]), *fullpath = NULL;
 	pid_t pid;
@@ -61,8 +63,7 @@ void execute(char **toks, char *file)
 
 	if (filename == NULL)
 	{
-		perror("Execution memory allocation failed");
-		return;
+		return (errno); /* Indicate perror for failure */
 	}
 	fullpath = path_finder(filename);
 	if (toks[0][0] == '/' || toks[0][0] == '.')
@@ -76,7 +77,7 @@ void execute(char **toks, char *file)
 	{
 		fprintf(stderr, "%s: 1: %s: not found\n", file, filename);
 		free(filename);
-		return;
+		return (1);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -95,6 +96,7 @@ void execute(char **toks, char *file)
 	}
 	wait(&status);
 	free(filename);
+	return (0);
 }
 
 /**
@@ -119,14 +121,13 @@ void freetok(char **head)
  * builtin - handles builtin commands exit and env
  * @toks: array of strings
  * @line: a string to be freed
+ * @status: shows exit status
  *
  * Return: void
  */
 
-int builtin(char **toks, char *line)
+int builtin(char **toks, char *line, int status)
 {
-	int status = errno;
-
 	if (strcmp(toks[0], "env") == 0)
 		return (1);
 
