@@ -39,7 +39,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 			}
 			else
 				if (execute(token, av[0]) == 1)
-					status = 2;
+					status = 2; /* to note execute error */
 		}
 		freetok(token);
 	}
