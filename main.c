@@ -66,7 +66,7 @@ void execute(char **toks, char *file)
 	}
 	fullpath = path_finder(filename);
 	if (toks[0][0] == '/' || toks[0][0] == '.')
-	{}
+	{ /* Full path indicated or input from an executable */}
 	else if (fullpath != NULL)
 	{
 		free(toks[0]);
@@ -125,7 +125,7 @@ void freetok(char **head)
 
 int builtin(char **toks, char *line)
 {
-	int status = 0;
+	int status = errno;
 
 	if (strcmp(toks[0], "env") == 0)
 		return (1);

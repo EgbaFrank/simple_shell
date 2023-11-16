@@ -15,7 +15,7 @@ char *path_finder(char *file)
 		path = getenv("PATH");
 		if (path == NULL)
 		{
-			fprintf(stderr, "PATH variable not set\n");
+			/* fprintf(stderr, "PATH variable not set\n"); */
 			return (NULL);
 		}
 		copy = strdup(path);
