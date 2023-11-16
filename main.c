@@ -11,15 +11,13 @@
 int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 {
 	char *lineptr = NULL;
-	size_t n = 0, int_mode = 1;
+	size_t n = 0;
 	ssize_t nread;
 	char **token;
 
-	while (int_mode)
+	while (1)
 	{
-		int_mode = isatty(STDIN_FILENO);
-
-		if (int_mode)
+		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "($) ", 5);
 
 		nread = getline(&lineptr, &n, stdin);
@@ -67,7 +65,7 @@ void execute(char **toks, char *file)
 		return;
 	}
 	fullpath = path_finder(filename);
-	if (toks[0][0] == '/')
+	if (toks[0][0] == '/' || toks[0][0] == '.')
 	{}
 	else if (fullpath != NULL)
 	{
